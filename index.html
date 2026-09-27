@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EcoPickup — Smart Waste Collection & Circular City</title>
+<meta name="description" content="EcoPickup: Schedule doorstep waste collections, track recycling fleets in real time, calculate your carbon offset, and earn citizen eco-rewards.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ TOAST NOTIFICATION CONTAINER ============ -->
+<div id="toast-box" class="toast-box"></div>
+
+<!-- ============ TOP LIVE STATUS TICKER ============ -->
+<div class="top-status-bar">
+  <div class="status-bar-inner">
+    <span class="live-indicator"><span class="pulse-ring"></span> 🟢 Live City Operations</span>
+    <span class="status-msg">Same-day pickup active in your sector • 14,820 kg diverted from landfills</span>
+    <span class="hotline-badge">📞 Dispatch: 1-800-ECO-PICKUP</span>
+  </div>
+</div>
+
+<!-- ============ NAVBAR ============ -->
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="nav-logo" onclick="goTo('screen-home')" role="button" tabindex="0">
+      <div class="logo-badge">♻️</div>
+      <div class="logo-text">
+        <span>Eco<strong>Pickup</strong></span>
+        <small>Smart Waste Network</small>
+      </div>
+    </div>
+    <div class="nav-links">
+      <button onclick="goTo('screen-home')" class="nav-link active" data-screen="screen-home">Home</button>
+      <button onclick="goTo('screen-newreq-1')" class="nav-link" data-screen="screen-newreq-1">Request Pickup</button>
+      <button onclick="goTo('screen-track')" class="nav-link" data-screen="screen-track">Track Status</button>
+      <button onclick="goTo('screen-citymap')" class="nav-link" data-screen="screen-citymap">🗺️ City Map</button>
+      <button onclick="goTo('screen-calc')" class="nav-link" data-screen="screen-calc">Impact Calculator</button>
+      <button onclick="goTo('screen-rewards')" class="nav-link" data-screen="screen-rewards">EcoRewards</button>
+      <button onclick="goTo('screen-learn')" class="nav-link" data-screen="screen-learn">Sorting Academy</button>
+      <button onclick="goTo('screen-report')" class="nav-link" data-screen="screen-report">Report Issue</button>
+      <button onclick="goTo('screen-admin-login')" class="nav-link nav-link-admin" data-screen="screen-admin-login">Staff Portal</button>
+    </div>
+    <div class="nav-actions">
+      <button class="notif-bell" id="notif-bell" onclick="toggleNotifPanel()" aria-label="Notifications" title="View notifications">
+        <span class="bell-icon">🔔</span>
+        <span class="notif-dot" id="notif-dot"></span>
+      </button>
+      <button class="sound-toggle" id="sound-toggle" onclick="toggleSound()" aria-label="Toggle sound effects" title="Sound Effects: On/Off">🔊</button>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle dark/light mode">🌙</button>
+      <button class="nav-burger" id="nav-burger" onclick="toggleMobileNav()" aria-label="Open mobile menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <!-- Notification Panel -->
+  <div class="notif-panel" id="notif-panel">
+    <div class="notif-header">
+      <span>🔔 Notifications</span>
+      <button onclick="clearNotifs()" class="notif-clear-btn">Clear all</button>
+    </div>
+    <div class="notif-list" id="notif-list"></div>
+  </div>
+</nav>
+
+<div class="mobile-nav" id="mobile-nav">
+  <button onclick="mobileGo('screen-home')">🏠 Home</button>
+  <button onclick="mobileGo('screen-newreq-1')">➕ Request Pickup</button>
+  <button onclick="mobileGo('screen-track')">🔍 Track Request</button>
+  <button onclick="mobileGo('screen-citymap')">🗺️ City Map</button>
+  <button onclick="mobileGo('screen-calc')">🧮 Impact Calculator</button>
+  <button onclick="mobileGo('screen-rewards')">🏆 EcoRewards</button>
+  <button onclick="mobileGo('screen-learn')">📚 Sorting Academy</button>
+  <button onclick="mobileGo('screen-report')">⚠️ Report Issue</button>
+  <button onclick="mobileGo('screen-admin-login')">👨‍💼 Staff Portal</button>
+</div>
+
+<!-- ============ HOME / LANDING PAGE ============ -->
+<section id="screen-home" class="screen active">
+
+  <div class="hero">
+    <canvas id="hero-particles" class="hero-particles-canvas"></canvas>
+    <div class="hero-bg-glow"></div>
+    <div class="hero-orbs">
+      <div class="hero-orb orb-1"></div>
+      <div class="hero-orb orb-2"></div>
+      <div class="hero-orb orb-3"></div>
+    </div>
+    <div class="hero-inner">
+      <span class="hero-badge animate-float">
+        <span class="badge-sparkle">✨</span>
+        <span>Cleaner City, Zero Landfill</span>
+      </span>
+      <h1 class="hero-title-typed">Smart Waste Collection,<br><span id="typewriter-text" class="hero-gradient-text">Made Effortless.</span><span class="typed-cursor">|</span></h1>
+      <p>Schedule doorstep collections in under a minute, track verified recycling fleets in real time, calculate your carbon offset, and earn citizen rewards.</p>
+      <div class="hero-btns">
+        <button class="cta cta-primary" onclick="goTo('screen-newreq-1')">
+          <span>➕ Request a Pickup</span>
+          <span class="btn-arrow">→</span>
+        </button>
+        <button class="cta cta-ghost" onclick="goTo('screen-track')">
+          <span>🔍 Track My Request</span>
+        </button>
+        <button class="cta cta-glass" onclick="goTo('screen-citymap')">
+          <span>🗺️ Live City Map</span>
+        </button>
+      </div>
+      <div class="hero-perks">
+        <div class="perk-pill">✓ 100% Free Doorstep Collection</div>
+        <div class="perk-pill">✓ Certified Zero-Landfill Recyclers</div>
+        <div class="perk-pill">✓ Earn Citizen EcoPoints</div>
+        <div class="perk-pill">✓ Electric Fleet Only</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-band reveal" id="home-stats"></div>
+
+  <!-- QUICK FEATURE CARDS -->
+  <section class="section">
+    <div class="section-title-wrap">
+      <span class="section-pill">PLATFORM FEATURES</span>
+      <h2 class="section-title">Everything Needed for a Clean City</h2>
+      <p class="section-sub">Explore all the tools available for residents and local communities.</p>
+    </div>
+    <div class="features-showcase-grid">
+      <div class="feature-box" onclick="goTo('screen-newreq-1')">
+        <div class="fb-icon">📦</div>
+        <h3>Doorstep Pickup</h3>
+        <p>Book convenient scheduled collections for plastics, bulk items, e-waste, or organic scraps.</p>
+        <span class="fb-link">Book Now →</span>
+      </div>
+      <div class="feature-box" onclick="goTo('screen-track')">
+        <div class="fb-icon">🔍</div>
+        <h3>Live Milestone Tracker</h3>
+        <p>Follow your collection request from driver dispatch to verified weigh-in and recycling.</p>
+        <span class="fb-link">Track Pickup →</span>
+      </div>
+      <div class="feature-box" onclick="goTo('screen-calc')">
+        <div class="fb-icon">🧮</div>
+        <h3>Carbon Impact Calculator</h3>
+        <p>Estimate your household annual environmental footprint: CO2 averted, trees saved, and water preserved.</p>
+        <span class="fb-link">Calculate Savings →</span>
+      </div>
+      <div class="feature-box" onclick="goTo('screen-rewards')">
+        <div class="fb-icon">🏆</div>
+        <h3>Citizen EcoRewards</h3>
+        <p>Earn Green Credits for every segregated batch. Redeem municipal discounts, trees, and vouchers.</p>
+        <span class="fb-link">View Rewards →</span>
+      </div>
+      <div class="feature-box" onclick="goTo('screen-learn')">
+        <div class="fb-icon">📚</div>
+        <h3>Sorting Academy & Quiz</h3>
+        <p>Master the 4-bin color code matrix and test your knowledge with the interactive quiz.</p>
+        <span class="fb-link">Learn & Play →</span>
+      </div>
+      <div class="feature-box" onclick="goTo('screen-report')">
+        <div class="fb-icon">⚠️</div>
+        <h3>Report Incident</h3>
+        <p>Notice an overflowing community bin or missed collection? Alert municipal dispatch instantly.</p>
+        <span class="fb-link">Report Problem →</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE FAST SORTER ARCADE -->
+  <section class="section arcade-section">
+    <div class="section-title-wrap">
+      <span class="section-pill animate-pulse-badge">🎮 INTERACTIVE SIMULATOR</span>
+      <h2 class="section-title">Speed Sorter Challenge</h2>
+      <p class="section-sub">Sort incoming city waste into the right bin. Earn real citizen EcoPoints as you play!</p>
+    </div>
+    
+    <div class="arcade-card reveal">
+      <div class="arcade-status-bar">
+        <div class="arcade-stat"><span class="astat-label">STREAK</span><strong id="arcade-streak">0 🔥</strong></div>
+        <div class="arcade-stat"><span class="astat-label">POINTS EARNED</span><strong id="arcade-pts" class="text-green">+0 pts</strong></div>
+        <div class="arcade-stat"><span class="astat-label">ACCURACY</span><strong id="arcade-acc">100%</strong></div>
+      </div>
+      
+      <!-- Current Item Card with floating animation -->
+      <div class="arcade-conveyor">
+        <div class="conveyor-track"></div>
+        <div class="arcade-item-stage" id="arcade-item-stage">
+          <div class="arcade-current-item" id="arcade-current-item">
+            <span class="item-emoji" id="arcade-item-icon">🥤</span>
+            <span class="item-name" id="arcade-item-name">Plastic Soda Bottle</span>
+            <span class="item-tip">Click the matching bin below to segregate!</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Target Bins with 3D Lids -->
+      <div class="arcade-bins-grid">
+        <button class="arcade-bin bin-blue" id="bin-recycle" onclick="arcadeSort('recycle')">
+          <div class="bin-lid"></div>
+          <div class="bin-body">
+            <span class="bin-icon">♻️</span>
+            <strong class="bin-title">Blue Bin</strong>
+            <small class="bin-sub">Dry Recyclables</small>
+          </div>
+        </button>
+        <button class="arcade-bin bin-green" id="bin-organic" onclick="arcadeSort('organic')">
+          <div class="bin-lid"></div>
+          <div class="bin-body">
+            <span class="bin-icon">🍌</span>
+            <strong class="bin-title">Green Bin</strong>
+            <small class="bin-sub">Wet / Food Scraps</small>
+          </div>
+        </button>
+        <button class="arcade-bin bin-grey" id="bin-ewaste" onclick="arcadeSort('ewaste')">
+          <div class="bin-lid"></div>
+          <div class="bin-body">
+            <span class="bin-icon">🔌</span>
+            <strong class="bin-title">Grey Bin</strong>
+            <small class="bin-sub">E-Waste & Cables</small>
+          </div>
+        </button>
+        <button class="arcade-bin bin-red" id="bin-hazard" onclick="arcadeSort('hazard')">
+          <div class="bin-lid"></div>
+          <div class="bin-body">
+            <span class="bin-icon">☣️</span>
+            <strong class="bin-title">Red Bin</strong>
+            <small class="bin-sub">Hazardous & Meds</small>
+          </div>
+        </button>
+      </div>
+      
+      <div class="arcade-feedback" id="arcade-feedback">
+        <span>💡 Tap a bin to test your segregation reflexes!</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section section-alt">
+    <div class="section-title-wrap">
+      <span class="section-pill">HOW IT WORKS</span>
+      <h2 class="section-title">Effortless in 4 Simple Steps</h2>
+      <p class="section-sub">From your doorstep to a sustainable circular recycling chain.</p>
+    </div>
+    <div class="how-grid reveal">
+      <div class="how-card">
+        <div class="how-num">1</div>
+        <div class="how-icon">🗑️</div>
+        <h3>Choose Waste Type</h3>
+        <p>Pick what you need collected — dry recyclables, e-waste, organic compost, or bulky items.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">2</div>
+        <div class="how-icon">📍</div>
+        <h3>Share Pickup Details</h3>
+        <p>Provide your address and select a convenient morning, afternoon, or evening window.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">3</div>
+        <div class="how-icon">🚚</div>
+        <h3>Electric Fleet Arrives</h3>
+        <p>Our verified sanitation team weighs, logs, and collects your items responsibly.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">4</div>
+        <div class="how-icon">✅</div>
+        <h3>Track & Certificate</h3>
+        <p>Follow status milestones anytime and receive a verified green recycling record.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES SHOWCASE -->
+  <section class="section">
+    <div class="section-title-wrap">
+      <span class="section-pill">COLLECTION CATEGORIES</span>
+      <h2 class="section-title">What We Collect</h2>
+      <p class="section-sub">Select any stream below to launch an instant doorstep collection request.</p>
+    </div>
+    <div class="cat-showcase reveal" id="home-cat-grid"></div>
+  </section>
+
+  <!-- WHY SEGREGATION MATTERS -->
+  <section class="section section-alt">
+    <div class="why-wrap reveal">
+      <div class="why-art">
+        <div class="why-art-badge">🌍</div>
+        <div class="why-art-icons">
+          <span>♻️</span><span>🌱</span><span>⚡</span>
+        </div>
+      </div>
+      <div class="why-text">
+        <span class="section-pill">WHY IT MATTERS</span>
+        <h2>Separation at Source Powers Circular Cities</h2>
+        <p>When waste is mixed, over 80% ends up polluting soil, air, and water in landfills. Segregating clean plastics, metals, paper, and food scraps at home allows over 90% to be remanufactured back into clean industrial supply chains.</p>
+        <p>Just two minutes of sorting in your home protects sanitation workers and preserves clean water and air for the whole community.</p>
+        <button class="cta cta-primary" onclick="goTo('screen-learn')">
+          <span>📚 Learn How to Sort Waste</span>
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section">
+    <div class="section-title-wrap">
+      <span class="section-pill">TESTIMONIALS</span>
+      <h2 class="section-title">What Our Community Says</h2>
+      <p class="section-sub">Trusted daily by thousands of residents and municipal collection crews.</p>
+    </div>
+    <div class="testimonial-grid reveal">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p>“Requesting a pickup took less than a minute. I love that I can track the driver status right after with the ticket number!”</p>
+        <div class="testimonial-author">
+          <div class="t-avatar">👩‍🦰</div>
+          <div>
+            <div class="testimonial-name">Meera Sundaram</div>
+            <div class="t-role">Resident, Sector 4</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p>“Finally an easy way to get rid of old electronics and batteries responsibly. The sorting guide is super clear and easy to follow.”</p>
+        <div class="testimonial-author">
+          <div class="t-avatar">👨‍💻</div>
+          <div>
+            <div class="testimonial-name">Arjun Patel</div>
+            <div class="t-role">Green Champion, Tech Park</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p>“As a collection driver, the dispatch dashboard organizes all daily pickups seamlessly and saves tons of fuel on our routes.”</p>
+        <div class="testimonial-author">
+          <div class="t-avatar">👷‍♀️</div>
+          <div>
+            <div class="testimonial-name">Sana Al-Mansoor</div>
+            <div class="t-role">Municipal Collection Staff</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMUNITY WEEKLY CHALLENGE -->
+  <section class="section">
+    <div class="section-title-wrap">
+      <span class="section-pill">COMMUNITY CHALLENGES</span>
+      <h2 class="section-title">This Week's Eco Challenges</h2>
+      <p class="section-sub">Complete challenges together — earn bonus EcoPoints and city-wide badges.</p>
+    </div>
+    <div class="challenges-grid" id="challenges-grid"></div>
+  </section>
+
+  <!-- LIVE CITY FEED -->
+  <section class="section section-alt">
+    <div class="section-title-wrap">
+      <span class="section-pill">LIVE ACTIVITY FEED</span>
+      <h2 class="section-title">What's Happening in Your City</h2>
+      <p class="section-sub">Real-time community recycling activity streamed from verified drivers.</p>
+    </div>
+    <div class="city-feed" id="city-feed"></div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section-alt">
+    <div class="section-title-wrap">
+      <span class="section-pill">COMMON QUESTIONS</span>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-sub">Find quick answers to common questions about collection and sorting.</p>
+    </div>
+    <div class="faq-list reveal" id="faq-list"></div>
+  </section>
+
+</section>
+
+<!-- ============ NEW REQUEST: STEP 1 - CATEGORY ============ -->
+<section id="screen-newreq-1" class="screen">
+  <div class="inner-page">
+    <button class="back-btn" onclick="goTo('screen-home')">⬅ Back to Home</button>
+    <div class="wizard-header">
+      <div class="dots">
+        <span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      </div>
+      <p class="step-indicator">STEP 1 OF 4</p>
+      <h2 class="big-question">What kind of waste do you have?</h2>
+      <p class="sub-hint">Tap a category card below to customize your pickup</p>
+    </div>
+    <div class="cat-grid" id="cat-grid"></div>
+
+    <div class="weight-select-card mt-4">
+      <label class="big-label">Estimated Batch Weight:</label>
+      <div class="weight-pills">
+        <button type="button" class="wp-pill active" onclick="setWeight('Small (~1-5 kg)', this)">Small (&lt;5 kg)</button>
+        <button type="button" class="wp-pill" onclick="setWeight('Medium (~5-20 kg)', this)">Medium (5-20 kg)</button>
+        <button type="button" class="wp-pill" onclick="setWeight('Heavy (~20-50 kg)', this)">Heavy (20-50 kg)</button>
+        <button type="button" class="wp-pill" onclick="setWeight('Bulk (>50 kg)', this)">Bulk (&gt;50 kg)</button>
+      </div>
+      <div class="rewards-incentive-pill">
+        <span>🎁 Earn <strong>+50 EcoPoints</strong> upon driver verification</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NEW REQUEST: STEP 2 - DETAILS ============ -->
+<section id="screen-newreq-2" class="screen">
+  <div class="inner-page">
+    <button class="back-btn" onclick="goTo('screen-newreq-1')">⬅ Back to Category</button>
+    <div class="wizard-header">
+      <div class="dots">
+        <span class="dot done"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+      </div>
+      <p class="step-indicator">STEP 2 OF 4</p>
+      <h2 class="big-question">Where should we collect it?</h2>
+      <p class="sub-hint">Provide your contact info and pickup address</p>
+    </div>
+
+    <div class="form-card">
+      <div class="input-field">
+        <label class="big-label" for="in-name">Full Name *</label>
+        <input class="big-input" type="text" id="in-name" placeholder="e.g. Sarah Connor">
+      </div>
+
+      <div class="input-field">
+        <label class="big-label" for="in-phone">Phone Number *</label>
+        <input class="big-input" type="tel" id="in-phone" placeholder="e.g. +1 (555) 234-5678">
+      </div>
+
+      <div class="input-field">
+        <div class="label-row">
+          <label class="big-label" for="in-address">Pickup Address *</label>
+          <button type="button" class="btn-location-fill" onclick="autoFillAddress()">📍 Auto-fill Demo</button>
+        </div>
+        <textarea class="big-input" id="in-address" rows="3" placeholder="Apartment / Flat, Street Name, Sector, Landmark..."></textarea>
+      </div>
+
+      <button class="huge-btn huge-btn-green" onclick="goToStep3()">
+        <span class="huge-icon">➡️</span><span>Continue to Date & Time</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NEW REQUEST: STEP 3 - WHEN ============ -->
+<section id="screen-newreq-3" class="screen">
+  <div class="inner-page">
+    <button class="back-btn" onclick="goTo('screen-newreq-2')">⬅ Back to Address</button>
+    <div class="wizard-header">
+      <div class="dots">
+        <span class="dot done"></span><span class="dot done"></span><span class="dot active"></span><span class="dot"></span>
+      </div>
+      <p class="step-indicator">STEP 3 OF 4</p>
+      <h2 class="big-question">When should our team arrive?</h2>
+      <p class="sub-hint">Choose your preferred collection date and arrival window</p>
+    </div>
+
+    <div class="form-card">
+      <div class="input-field">
+        <label class="big-label" for="in-date">Select Pickup Date *</label>
+        <input class="big-input" type="date" id="in-date">
+      </div>
+
+      <div class="input-field">
+        <label class="big-label">Select Arrival Window *</label>
+        <div class="slot-grid">
+          <button class="slot-btn" onclick="pickSlot(this,'Morning')">
+            <span class="slot-emoji">🌅</span>
+            <span class="slot-name">Morning</span>
+            <span class="slot-hrs">8 AM – 12 PM</span>
+          </button>
+          <button class="slot-btn" onclick="pickSlot(this,'Afternoon')">
+            <span class="slot-emoji">☀️</span>
+            <span class="slot-name">Afternoon</span>
+            <span class="slot-hrs">12 PM – 4 PM</span>
+          </button>
+          <button class="slot-btn" onclick="pickSlot(this,'Evening')">
+            <span class="slot-emoji">🌇</span>
+            <span class="slot-name">Evening</span>
+            <span class="slot-hrs">4 PM – 8 PM</span>
+          </button>
+        </div>
+      </div>
+
+      <button class="huge-btn huge-btn-green" onclick="goToStep4()">
+        <span class="huge-icon">➡️</span><span>Review Summary</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NEW REQUEST: STEP 4 - CONFIRM ============ -->
+<section id="screen-newreq-4" class="screen">
+  <div class="inner-page">
+    <button class="back-btn" onclick="goTo('screen-newreq-3')">⬅ Edit Time Slot</button>
+    <div class="wizard-header">
+      <div class="dots">
+        <span class="dot done"></span><span class="dot done"></span><span class="dot done"></span><span class="dot active"></span>
+      </div>
+      <p class="step-indicator">STEP 4 OF 4</p>
+      <h2 class="big-question">Please review your booking</h2>
+      <p class="sub-hint">Confirm dispatch details before submitting</p>
+    </div>
+
+    <div class="summary-card" id="summary-card"></div>
+    <button class="huge-btn huge-btn-green" onclick="submitRequest()">
+      <span class="huge-icon">✅</span><span>Yes, Confirm & Schedule Pickup</span>
+    </button>
+  </div>
+</section>
+
+<!-- ============ SUCCESS SCREEN ============ -->
+<section id="screen-success" class="screen">
+  <div class="inner-page success-box">
+    <div class="success-card">
+      <div class="success-icon">🎉</div>
+      <h2 class="big-question">Pickup Scheduled!</h2>
+      <p class="sub-hint">Our electric collection vehicle has been scheduled.</p>
+      
+      <div class="ticket-wrapper">
+        <span class="ticket-sub">OFFICIAL TRACKING NUMBER</span>
+        <div class="ticket-id" id="ticket-id-display">--</div>
+        <p class="ticket-note">Save or copy this number to track your driver anytime.</p>
+      </div>
+
+      <div class="success-btn-stack">
+        <button class="huge-btn huge-btn-blue" onclick="copyTicketId()">
+          <span class="huge-icon">📋</span><span>Copy Tracking Number</span>
+        </button>
+        <button class="huge-btn huge-btn-green" onclick="goTo('screen-track'); searchTicketDirectly()">
+          <span class="huge-icon">🔍</span><span>Track This Pickup</span>
+        </button>
+        <button class="huge-btn huge-btn-ghost" onclick="goTo('screen-home')">
+          <span class="huge-icon">🏠</span><span>Back to Home</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRACK SCREEN ============ -->
+<section id="screen-track" class="screen">
+  <div class="inner-page inner-page-wide">
+    <button class="back-btn" onclick="goTo('screen-home')">⬅ Back to Home</button>
+    <div class="wizard-header">
+      <h2 class="big-question">Track Your Pickup Request</h2>
+      <p class="sub-hint">Search by your Pickup Number (e.g. WP-8241) or your Name</p>
+    </div>
+
+    <div class="search-wrap">
+      <div class="search-input-shell">
+        <span class="search-lens">🔍</span>
+        <input class="big-input search-input" type="text" id="track-search" placeholder="Type name or ticket number..." oninput="renderTrack()">
+      </div>
+      <div class="quick-chips">
+        <span>Try demo tickets:</span>
+        <button type="button" class="chip" onclick="quickFillTrack('WP-8241')">WP-8241</button>
+        <button type="button" class="chip" onclick="quickFillTrack('WP-5192')">WP-5192</button>
+        <button type="button" class="chip" onclick="quickFillTrack('WP-3810')">WP-3810</button>
+      </div>
+    </div>
+
+    <div id="track-results" class="track-results-grid"></div>
+  </div>
+</section>
+
+<!-- ============ FEATURE: CARBON & IMPACT CALCULATOR ============ -->
+<section id="screen-calc" class="screen">
+  <div class="inner-page inner-page-wide">
+    <button class="back-btn" onclick="goTo('screen-home')">⬅ Back to Home</button>
+    <div class="wizard-header">
+      <span class="section-pill">ENVIRONMENTAL METRICS</span>
+      <h2 class="big-question">Household Carbon & Impact Calculator</h2>
+      <p class="sub-hint">Slide to estimate your monthly waste diversion and compute annual planetary savings</p>
+    </div>
+
+    <div class="calc-grid-layout">
+      <!-- Sliders Card -->
+      <div class="calc-card">
+        <h3 class="calc-section-title">Your Monthly Segregation Estimates</h3>
+        
+        <div class="slider-group">
+          <div class="slider-head">
+            <span>🥤 Recycled Plastic (Bottles, Jars)</span>
+            <strong id="val-plastic">15 kg</strong>
+          </div>
+          <input type="range" id="range-plastic" min="0" max="60" value="15" oninput="updateImpactCalc()">
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-head">
+            <span>🍌 Organic Food & Kitchen Scraps</span>
+            <strong id="val-organic">30 kg</strong>
+          </div>
+          <input type="range" id="range-organic" min="0" max="100" value="30" oninput="updateImpactCalc()">
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-head">
+            <span>📦 Cardboard & Clean Paper</span>
+            <strong id="val-paper">20 kg</strong>
+          </div>
+          <input type="range" id="range-paper" min="0" max="80" value="20" oninput="updateImpactCalc()">
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-head">
+            <span>🔌 E-Waste Items (Phones, Cables, Batteries)</span>
+            <strong id="val-ewaste">3 items</strong>
+          </div>
+          <input type="range" id="range-ewaste" min="0" max="20" value="3" oninput="updateImpactCalc()">
+        </div>
+
+        <button class="huge-btn huge-btn-green mt-3" onclick="goTo('screen-newreq-1')">
+          <span>📦 Schedule Doorstep Pickup Now</span>
+        </button>
+      </div>
+
+      <!-- Result Card -->
+      <div class="calc-card calc-result-card">
+        <div class="calc-hero-badge">ANNUAL AVOIDED EMISSIONS</div>
+        <div class="calc-hero-num" id="calc-co2">386</div>
+        <div class="calc-hero-unit">KG CO2e PREVENTED PER YEAR</div>
+
+        <div class="calc-metrics-grid">
+          <div class="calc-metric-tile">
+            <span class="cm-icon">🌳</span>
+            <div class="cm-val" id="calc-trees">17.8</div>
+            <div class="cm-lbl">Trees Equivalent Planted</div>
+          </div>
+          <div class="calc-metric-tile">
+            <span class="cm-icon">💧</span>
+            <div class="cm-val" id="calc-water">3,240 L</div>
+            <div class="cm-lbl">Fresh Water Conserved</div>
+          </div>
+          <div class="calc-metric-tile">
+            <span class="cm-icon">⚡</span>
+            <div class="cm-val" id="calc-energy">580 kWh</div>
+            <div class="cm-lbl">Clean Energy Preserved</div>
+          </div>
+          <div class="calc-metric-tile">
+            <span class="cm-icon">🎁</span>
+            <div class="cm-val" id="calc-pts">820 pts</div>
+            <div class="cm-lbl">Potential EcoPoints Earned</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURE: ECOREWARDS & CITIZEN GAMIFICATION ============ -->
+<section id="screen-rewards" class="screen">
+  <div class="inner-page inner-page-wide">
+    <button class="back-btn" onclick="goTo('screen-home')">⬅ Back to Home</button>
+    <div class="wizard-header">
+      <span class="section-pill">CITIZEN LOYALTY</span>
+      <h2 class="big-question">Citizen EcoRewards & Perks</h2>
+      <p class="sub-hint">Earn Green Credits for every collection batch and redeem municipal discounts</p>
+    </div>
+
+    <!-- Wallet Balance Card -->
+    <div class="rewards-wallet-card">
+      <div class="wallet-left">
+        <span class="wallet-tier-pill">⭐ EMERALD CITIZEN TIER</span>
+        <h3 class="wallet-user">Sarah Connor</h3>
+        <p class="wallet-subtitle">Verified Municipal Circular Participant</p>
+        <div class="wallet-pts-display">
+          <span class="pts-big" id="user-points-display">520</span>
+          <span class="pts-lbl">ECOPOINTS BALANCE</span>
+        </div>
+      </div>
+      <div class="wallet-right">
+        <div class="streak-box">
+          <span class="streak-emoji">🔥</span>
+          <div>
+            <strong>14 Days Streak</strong>
+            <small>Active Zero-Waste Sorter</small>
+          </div>
+        </div>
+        <button class="btn-earn-sim" onclick="simulateRecyclePoints()">+ Simulate Recycling Batch (+50 pts)</button>
+      </div>
+    </div>
+
+    <!-- Achievement Badges -->
+    <div class="section-title-wrap mt-5">
+      <h3 class="section-title">🏅 Achievement Badges</h3>
+      <p class="section-sub">Unlock badges for your eco milestones and recycling streaks.</p>
+    </div>
+    <div class="badges-grid" id="badges-grid"></div>
+
+    <!-- Redeemable Catalog -->
+    <div class="section-title-wrap mt-5">
+      <h3 class="section-title">Redeem Points for Vouchers</h3>
+      <p class="section-sub">Digital coupons issued directly to your device.</p>
+    </div>
+    <div class="rewards-catalog" id="rewards-catalog-list"></div>
+
+    <!-- Neighborhood Leaderboard -->
+    <div class="leaderboard-card mt-5">
+      <h3 class="lb-title">Neighborhood Zero-Waste Leaderboard</h3>
+      <table class="lb-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Citizen / Household</th>
+            <th>Sector</th>
+            <th>Waste Diverted</th>
+            <th>Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="lb-top">
+            <td>🥇 1</td>
+            <td><strong>Meera Sundaram</strong></td>
+            <td>Sector 4, Green Meadows</td>
+            <td>284 kg</td>
+            <td><span class="pts-tag">1,820 pts</span></td>
+          </tr>
+          <tr class="lb-top">
+            <td>🥈 2</td>
+            <td><strong>Arjun Patel</strong></td>
+            <td>Tech Park Boulevard</td>
+            <td>245 kg</td>
+            <td><span class="pts-tag">1,540 pts</span></td>
+          </tr>
+          <tr class="lb-top">
+            <td>🥉 3</td>
+            <td><strong>David Vance</strong></td>
+            <td>Harbour View Residences</td>
+            <td>198 kg</td>
+            <td><span class="pts-tag">1,210 pts</span></td>
+          </tr>
+          <tr class="lb-user">
+            <td>8</td>
+            <td><strong>Sarah Connor (You)</strong></td>
+            <td>Sector 4, Apt 8B</td>
+            <td>92 kg</td>
+            <td><span class="pts-tag" id="lb-user-pts">520 pts</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REPORT ISSUE SCREEN ============ -->
+<section id="screen-report" class="screen">
+  <div class="inner-page">
+    <button class="back-btn" onclick="goTo('screen-home')">⬅ Back to Home</button>
+    <div class="wizard-header">
+      <h2 class="big-question">Report a Sanitation Problem</h2>
+      <p class="sub-hint">Missed collection, overflowing community bin, or hazardous spill?</p>
+    </div>
+
+    <div class="form-card">
+      <div class="input-field">
+        <label class="big-label" for="iss-name">Your Name *</label>
+        <input class="big-input" type="text" id="iss-name" placeholder="Type your name">
+      </div>
+
+      <div class="input-field">
+        <label class="big-label">Type of Issue *</label>
+        <div class="slot-grid issue-grid">
+          <button class="slot-btn" onclick="pickIssueType(this,'Missed Pickup')">
+            <span class="slot-emoji">🚫</span>
+            <span class="slot-name">Missed Pickup</span>
+          </button>
+          <button class="slot-btn" onclick="pickIssueType(this,'Overflowing Bin')">
+            <span class="slot-emoji">🗑️</span>
+            <span class="slot-name">Overflowing Bin</span>
+          </button>
+          <button class="slot-btn" onclick="pickIssueType(this,'Other Hazard')">
+            <span class="slot-emoji">⚠️</span>
+            <span class="slot-name">Other Hazard</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="input-field">
+        <label class="big-label" for="iss-location">Location / Landmark *</label>
+        <input class="big-input" type="text" id="iss-location" placeholder="e.g. Corner of 5th Ave & Pine St, outside Market">
+      </div>
+
+      <div class="input-field">
+        <label class="big-label" for="iss-desc">Describe the Problem</label>
+        <textarea class="big-input" id="iss-desc" rows="3" placeholder="Tell us more about the situation or vehicle access..."></textarea>
+      </div>
+
+      <button class="huge-btn huge-btn-red" onclick="submitIssue()">
+        <span class="huge-icon">🚨</span><span>Submit Incident Report</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LEARN SCREEN ============ -->
+<section id="screen-learn" class="screen">
+  <div class="inner-page inner-page-wide">
+    <button class="back-btn" onclick="goTo('screen-home')">⬅ Back to Home</button>
+    <div class="wizard-header">
+      <span class="section-pill">EDUCATION & QUIZ</span>
+      <h2 class="big-question">Waste Segregation Academy</h2>
+      <p class="sub-hint">Tap any bin category to discover what belongs inside, or test your knowledge with the quiz below</p>
+    </div>
+
+    <div class="video-cta-card">
+      <div class="video-cta-text">
+        <h3>Watch Master Sorting Video Guide</h3>
+        <p>Learn the standard wet, dry, hazardous, and electronic waste separation matrix in 3 minutes.</p>
+      </div>
+      <a class="video-play-btn" href="https://www.youtube.com/results?search_query=how+to+segregate+waste+at+home+wet+dry+hazardous" target="_blank" rel="noopener">
+        <span>▶️ Watch Video</span>
+      </a>
+    </div>
+
+    <div class="learn-grid" id="learn-grid"></div>
+
+    <!-- INTERACTIVE SORTING MINI-QUIZ -->
+    <div class="quiz-container-card mt-5">
+      <div class="quiz-header">
+        <span class="section-pill">INTERACTIVE GAME</span>
+        <h3>Test Your Waste Segregation IQ</h3>
+        <p class="quiz-sub">Answer correctly to earn +50 EcoPoints!</p>
+      </div>
+      <div id="quiz-box" class="quiz-box"></div>
+    </div>
+
+    <!-- COMMUNITY SMART BIN RADAR SIMULATOR -->
+    <div class="radar-card mt-5">
+      <div class="radar-header">
+        <div>
+          <span class="section-pill">LIVE IOT RADAR</span>
+          <h3>Community Smart Bin Fill Levels</h3>
+          <p class="radar-sub">Real-time solar ultrasonic sensors reporting municipal bin status</p>
+        </div>
+        <button class="btn-refresh-radar" onclick="refreshRadarBins()">🔄 Refresh Sensors</button>
+      </div>
+      <div class="radar-bins-grid" id="radar-bins-grid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LIVE CITY MAP SCREEN ============ -->
+<section id="screen-citymap" class="screen">
+  <div class="inner-page inner-page-wide">
+    <button class="back-btn" onclick="goTo('screen-home')">⬅ Back to Home</button>
+    <div class="wizard-header">
+      <span class="section-pill">LIVE OPERATIONS</span>
+      <h2 class="big-question">Live City Waste Operations Map</h2>
+      <p class="sub-hint">Real-time view of electric fleet positions, smart bins, and collection zones</p>
+    </div>
+
+    <!-- Map Visualization -->
+    <div class="citymap-wrapper">
+      <canvas id="citymap-canvas" class="citymap-canvas"></canvas>
+      <div class="citymap-legend">
+        <div class="legend-item"><span class="legend-dot" style="background:#10b981"></span> Active Fleet</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span> Pending Zone</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#f43f5e"></span> Overflow Alert</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#0284c7"></span> Smart Bin</div>
+      </div>
+      <div class="citymap-overlay">
+        <div class="map-live-badge"><span class="pulse-ring"></span> LIVE</div>
+      </div>
+    </div>
+
+    <!-- Fleet Status Cards -->
+    <div class="section-title-wrap mt-5">
+      <h3 class="section-title">Active Electric Fleet Status</h3>
+    </div>
+    <div class="fleet-grid" id="fleet-grid"></div>
+
+    <!-- Zone Stats -->
+    <div class="zone-stats-grid mt-5" id="zone-stats-grid"></div>
+  </div>
+</section>
+
+<!-- ============ ADMIN LOGIN SCREEN ============ -->
+<section id="screen-admin-login" class="screen">
+  <div class="inner-page">
+    <button class="back-btn" onclick="goTo('screen-home')">⬅ Back to Home</button>
+    <div class="wizard-header">
+      <div class="admin-lock-icon">🔐</div>
+      <h2 class="big-question">Staff Command Login</h2>
+      <p class="sub-hint">Enter your team dispatcher passcode to access the live fleet panel</p>
+    </div>
+
+    <div class="form-card text-center">
+      <div class="input-field">
+        <input class="big-input passcode-input" type="password" id="admin-code" placeholder="••••" maxlength="8" onkeydown="if(event.key==='Enter') checkAdminCode()">
+      </div>
+      <button class="huge-btn huge-btn-grey" onclick="checkAdminCode()">
+        <span class="huge-icon">🔑</span><span>Authenticate & Enter</span>
+      </button>
+      <div class="passcode-helper">
+        <span>Demo dispatcher code: <strong>1234</strong></span>
+        <button type="button" class="btn-quick-code" onclick="document.getElementById('admin-code').value='1234'; checkAdminCode()">Autofill & Login</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ADMIN DASHBOARD SCREEN ============ -->
+<section id="screen-admin" class="screen">
+  <div class="inner-page inner-page-wide">
+    <div class="admin-header-row">
+      <div>
+        <button class="back-btn" onclick="goTo('screen-home')">⬅ Exit Staff View</button>
+        <h2 class="big-question text-left">Municipal Fleet & Operations Command</h2>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="admin-action-btn" onclick="exportRequestsCSV()">📥 Export CSV</button>
+        <button class="admin-logout-btn" onclick="goTo('screen-home')">🚪 Logout</button>
+      </div>
+    </div>
+
+    <div class="stats-row" id="admin-stats"></div>
+    <div class="cat-bars" id="admin-cat-bars"></div>
+
+    <div class="admin-tabs">
+      <button class="admin-tab active" id="tab-requests" onclick="showAdminTab('requests')">📦 Pickup Requests</button>
+      <button class="admin-tab" id="tab-issues" onclick="showAdminTab('issues')">🚨 Reported Incidents</button>
+    </div>
+
+    <div id="admin-requests-view">
+      <div class="admin-toolbar">
+        <input class="big-input admin-search-box" type="text" id="admin-search" placeholder="Search by name, address, or ticket..." oninput="renderAdminList()">
+        <select class="big-input admin-filter-select" id="admin-filter" onchange="renderAdminList()">
+          <option value="">All Statuses</option>
+          <option>Pending</option>
+          <option>Scheduled</option>
+          <option>Collected</option>
+          <option>Cancelled</option>
+        </select>
+      </div>
+      <div id="admin-list" class="admin-list-container"></div>
+    </div>
+
+    <div id="admin-issues-view" style="display:none;">
+      <div id="admin-issues-list" class="admin-list-container"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MODAL: VOUCHER REDEEMED ============ -->
+<div class="modal-backdrop" id="voucher-modal" style="display:none;">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeVoucherModal()">✕</button>
+    <div class="modal-body text-center" id="voucher-modal-body"></div>
+  </div>
+</div>
+
+<!-- ============ FLOATING ACTION BUTTON DOCK ============ -->
+<div class="fab-dock" id="fab-dock">
+  <div class="fab-menu" id="fab-menu">
+    <button class="fab-item" onclick="goTo('screen-newreq-1'); closeFab()" title="Request Pickup">
+      <span>📦</span><span class="fab-label">Request</span>
+    </button>
+    <button class="fab-item" onclick="goTo('screen-track'); closeFab()" title="Track Request">
+      <span>🔍</span><span class="fab-label">Track</span>
+    </button>
+    <button class="fab-item" onclick="goTo('screen-report'); closeFab()" title="Report Issue">
+      <span>⚠️</span><span class="fab-label">Report</span>
+    </button>
+    <button class="fab-item" onclick="goTo('screen-citymap'); closeFab()" title="City Map">
+      <span>🗺️</span><span class="fab-label">Map</span>
+    </button>
+    <button class="fab-item" onclick="goTo('screen-rewards'); closeFab()" title="EcoRewards">
+      <span>🏆</span><span class="fab-label">Rewards</span>
+    </button>
+  </div>
+  <button class="fab-main" id="fab-main" onclick="toggleFab()" aria-label="Quick actions">
+    <span class="fab-main-icon">♻️</span>
+  </button>
+</div>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="footer-leaf">♻️</span>
+        <span>Eco<strong>Pickup</strong></span>
+      </div>
+      <p class="footer-desc">Making municipal waste collection organized, transparent, and eco-certified for every citizen.</p>
+    </div>
+    <div class="footer-links">
+      <button onclick="goTo('screen-newreq-1')">Request Pickup</button>
+      <button onclick="goTo('screen-track')">Track Status</button>
+      <button onclick="goTo('screen-calc')">Impact Calculator</button>
+      <button onclick="goTo('screen-rewards')">EcoRewards</button>
+      <button onclick="goTo('screen-learn')">Sorting Academy</button>
+      <button onclick="goTo('screen-report')">Report Issue</button>
+      <button onclick="goTo('screen-admin-login')">Staff Portal</button>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 EcoPickup Systems. Built for clean and circular neighborhoods.</p>
+      <div class="footer-badges">
+        <span>🌱 Certified Zero-Waste Framework</span>
+        <span>⚡ 100% Electric Dispatch</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
